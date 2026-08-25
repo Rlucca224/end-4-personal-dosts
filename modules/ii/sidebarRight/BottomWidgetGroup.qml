@@ -164,7 +164,8 @@ Rectangle {
                         toggled: root.selectedTab == index
                         buttonText: modelData.name
                         buttonIcon: modelData.icon
-                        onPressed: {
+                        pageIndex: index
+                        onPageSelected: {
                             root.selectedTab = index;
                             Persistent.states.sidebar.bottomGroup.tab = index;
                         }

@@ -21,6 +21,8 @@ TabButton {
     property bool rippleEnabled: true
     property int rippleDuration: 600
     property color rippleColor: toggled ? Appearance.colors.colSecondaryContainerActive : Appearance.colors.colLayer1Active
+    property int pageIndex
+    signal pageSelected(int index)
 
     function startRipple(x, y) {
         rippleAnim.x = x;
@@ -184,6 +186,7 @@ TabButton {
                         rippleFadeAnim.restart();
                     }
                 }
+                onTapped: root.pageSelected(root.pageIndex)
             }
         }
 
