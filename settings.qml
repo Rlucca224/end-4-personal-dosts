@@ -214,13 +214,12 @@ ApplicationWindow {
                                 required property var index
                                 required property var modelData
                                 toggled: root.currentPage === index
-                                onPageSelected: root.currentPage = index
+                                onPressed: root.currentPage = index;
                                 expanded: navRail.expanded
                                 buttonIcon: modelData.icon
                                 buttonIconRotation: modelData.iconRotation || 0
                                 buttonText: modelData.name
                                 showToggledHighlight: false
-                                pageIndex: index
                             }
                         }
                     }
