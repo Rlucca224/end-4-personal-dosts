@@ -1,6 +1,7 @@
 import qs.modules.common
 import qs.modules.common.widgets
 import qs.modules.common.functions
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -17,6 +18,51 @@ TabButton {
     property bool showToggledHighlight: true
     readonly property real visualWidth: root.expanded ? root.baseSize + 20 + itemText.implicitWidth : root.baseSize
 
+    property bool rippleEnabled: true
+    property int rippleDuration: 600
+    property color rippleColor: toggled ? Appearance.colors.colSecondaryContainerActive : Appearance.colors.colLayer1Active
+
+    function startRipple(x, y) {
+        rippleAnim.x = x;
+        rippleAnim.y = y;
+        rippleAnim.radius = Math.sqrt(itemBackground.width * itemBackground.width + itemBackground.height * itemBackground.height);
+        rippleFadeAnim.complete();
+        rippleAnim.restart();
+    }
+
+    component RippleAnim: NumberAnimation {
+        duration: root.rippleDuration
+        easing.type: Appearance.animation.elementMoveEnter.type
+        easing.bezierCurve: Appearance.animationCurves.standardDecel
+    }
+
+    RippleAnim {
+        id: rippleFadeAnim
+        duration: root.rippleDuration * 1.5
+        target: ripple
+        property: "opacity"
+        to: 0
+    }
+
+    SequentialAnimation {
+        id: rippleAnim
+        property real x
+        property real y
+        property real radius
+
+        PropertyAction { target: ripple; property: "x"; value: rippleAnim.x }
+        PropertyAction { target: ripple; property: "y"; value: rippleAnim.y }
+        PropertyAction { target: ripple; property: "opacity"; value: 1 }
+        ParallelAnimation {
+            RippleAnim {
+                target: ripple
+                properties: "implicitWidth,implicitHeight"
+                from: 0
+                to: rippleAnim.radius * 2
+            }
+        }
+    }
+
     Component.onCompleted: Qt.callLater(() => Qt.callLater(() => root.__animReady = true))
 
     property real baseSize: 56
@@ -24,16 +70,12 @@ TabButton {
     property real highlightCollapsedTopMargin: 8
     padding: 0
 
-    // The navigation item’s target area always spans the full width of the
-    // nav rail, even if the item container hugs its contents.
     Layout.fillWidth: true
-    // implicitWidth: contentItem.implicitWidth
     implicitHeight: baseSize
 
     background: null
     PointingHandInteraction {}
 
-    // Real stuff
     contentItem: Item {
         id: buttonContent
         anchors {
@@ -91,6 +133,57 @@ TabButton {
 
             Behavior on color {
                 animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+            }
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    width: itemBackground.width
+                    height: itemBackground.height
+                    radius: itemBackground.radius
+                }
+            }
+
+            Item {
+                id: ripple
+                width: ripple.implicitWidth
+                height: ripple.implicitHeight
+                opacity: 0
+                visible: width > 0 && height > 0
+
+                property real implicitWidth: 0
+                property real implicitHeight: 0
+
+                Behavior on opacity {
+                    animation: Appearance.animation.elementMoveFast.colorAnimation.createObject(this)
+                }
+
+                RadialGradient {
+                    anchors.fill: parent
+                    gradient: Gradient {
+                        GradientStop { position: 0.0; color: root.rippleColor }
+                        GradientStop { position: 0.3; color: root.rippleColor }
+                        GradientStop { position: 0.5; color: Qt.rgba(root.rippleColor.r, root.rippleColor.g, root.rippleColor.b, 0) }
+                    }
+                }
+
+                transform: Translate {
+                    x: -ripple.width / 2
+                    y: -ripple.height / 2
+                }
+            }
+
+            TapHandler {
+                acceptedButtons: Qt.LeftButton
+                grabPermissions: PointerHandler.TakeOverForbidden
+                enabled: root.rippleEnabled
+                onPressedChanged: {
+                    if (pressed) {
+                        root.startRipple(point.position.x, point.position.y);
+                    } else {
+                        rippleFadeAnim.restart();
+                    }
+                }
             }
         }
 
