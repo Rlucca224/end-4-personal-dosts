@@ -25,9 +25,12 @@ Item {
 
     Rectangle {
         id: highlight
-        property int visualIndex: root.currentIndex
+        property int visualIndex: 0
         property real itemHeight: tabBarColumn.children[0]?.baseSize ?? 56
         property real baseHighlightHeight: tabBarColumn.children[0]?.baseHighlightHeight ?? 56
+
+        Component.onCompleted: visualIndex = root.currentIndex
+
         anchors {
             top: tabBarColumn.top
             left: tabBarColumn.left
@@ -49,15 +52,15 @@ Item {
 
         SequentialAnimation {
             id: fadeSwitch
-            property int pendingIndex: root.currentIndex
+            property int pendingIndex: 0
 
             NumberAnimation {
                 target: highlight
                 property: "opacity"
                 to: 0
-                duration: Appearance.animation.elementMoveExit.duration
-                easing.type: Appearance.animation.elementMoveExit.type
-                easing.bezierCurve: Appearance.animation.elementMoveExit.bezierCurve
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
             PropertyAction {
                 target: highlight
@@ -68,9 +71,9 @@ Item {
                 target: highlight
                 property: "opacity"
                 to: 1
-                duration: Appearance.animation.elementMoveEnter.duration
-                easing.type: Appearance.animation.elementMoveEnter.type
-                easing.bezierCurve: Appearance.animation.elementMoveEnter.bezierCurve
+                duration: Appearance.animation.elementMoveFast.duration
+                easing.type: Appearance.animation.elementMoveFast.type
+                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
             }
         }
     }
