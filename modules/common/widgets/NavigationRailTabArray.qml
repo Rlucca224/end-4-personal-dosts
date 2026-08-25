@@ -58,9 +58,8 @@ Item {
                 target: highlight
                 property: "opacity"
                 to: 0
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Appearance.animation.elementMoveFast.type
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                duration: 100
+                easing.type: Easing.OutCubic
             }
             PropertyAction {
                 target: highlight
@@ -71,9 +70,8 @@ Item {
                 target: highlight
                 property: "opacity"
                 to: 1
-                duration: Appearance.animation.elementMoveFast.duration
-                easing.type: Appearance.animation.elementMoveFast.type
-                easing.bezierCurve: Appearance.animation.elementMoveFast.bezierCurve
+                duration: 120
+                easing.type: Easing.OutCubic
             }
         }
     }
