@@ -7,6 +7,7 @@ Item {
     id: root
     property int currentIndex: 0
     property bool expanded: false
+    property bool animateSelection: true
     default property alias tabData: tabBarColumn.data  
     implicitHeight: tabBarColumn.implicitHeight
     implicitWidth: tabBarColumn.implicitWidth
@@ -26,6 +27,7 @@ Item {
         implicitWidth: tabBarColumn?.children[root.currentIndex]?.visualWidth ?? 100
 
         Behavior on anchors.topMargin {
+            enabled: root.animateSelection
             NumberAnimation {
                 duration: Appearance.animationCurves.expressiveFastSpatialDuration
                 easing.type: Appearance.animation.elementMove.type

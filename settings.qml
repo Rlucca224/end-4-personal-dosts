@@ -206,6 +206,7 @@ ApplicationWindow {
                     NavigationRailTabArray {
                         currentIndex: root.currentPage
                         expanded: navRail.expanded
+                        animateSelection: false
                         Repeater {
                             model: root.pages
                             NavigationRailButton {

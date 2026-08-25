@@ -13,8 +13,11 @@ TabButton {
     property real buttonIconRotation: 0
     property string buttonText
     property bool expanded: false
+    property bool __animReady: false
     property bool showToggledHighlight: true
     readonly property real visualWidth: root.expanded ? root.baseSize + 20 + itemText.implicitWidth : root.baseSize
+
+    Component.onCompleted: Qt.callLater(() => Qt.callLater(() => root.__animReady = true))
 
     property real baseSize: 56
     property real baseHighlightHeight: 32
@@ -71,6 +74,7 @@ TabButton {
                 }
             }
             transitions: Transition {
+                enabled: root.__animReady
                 AnchorAnimation {
                     duration: Appearance.animation.elementMoveFast.duration
                     easing.type: Appearance.animation.elementMoveFast.type
@@ -135,6 +139,7 @@ TabButton {
                 }
             }
             transitions: Transition {
+                enabled: root.__animReady
                 AnchorAnimation {
                     duration: Appearance.animation.elementMoveFast.duration
                     easing.type: Appearance.animation.elementMoveFast.type

@@ -12,7 +12,7 @@ RippleButton {
     property bool expanded: false
     property real baseSize: 56
     property real elementSpacing: 5
-    implicitWidth: expanded ? (Math.max(contentRowLayout.implicitWidth + 10 * 2, baseSize)) : baseSize
+    implicitWidth: Math.max(contentRowLayout.implicitWidth + 10 * 2, baseSize)
     implicitHeight: baseSize
     buttonRadius: baseSize / 14 * 4
     colBackground: Appearance.colors.colPrimaryContainer
