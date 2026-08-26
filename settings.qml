@@ -153,11 +153,13 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             spacing: contentPadding
-            Item {
+            Rectangle {
                 id: navRailWrapper
                 Layout.fillHeight: true
-                Layout.margins: 5
-                implicitWidth: navRail.expanded ? 150 : fab.baseSize
+                Layout.margins: 0
+                implicitWidth: navRail.expanded ? 195 : fab.baseSize
+                color: Appearance.m3colors.m3surfaceContainerLow
+                radius: Appearance.rounding.normal
                 Behavior on implicitWidth {
                     animation: Appearance.animation.elementMoveFast.numberAnimation.createObject(this)
                 }
@@ -167,16 +169,14 @@ ApplicationWindow {
                         left: parent.left
                         top: parent.top
                         bottom: parent.bottom
+                        leftMargin: 20
                     }
                     spacing: 10
                     expanded: root.width > 900
-                    
-                    NavigationRailExpandButton {
-                        focus: root.visible
-                    }
 
                     FloatingActionButton {
                         id: fab
+                        Layout.bottomMargin: -25
                         property bool justCopied: false
                         iconText: justCopied ? "check" : "edit"
                         buttonText: justCopied ? Translation.tr("Path copied") : Translation.tr("Config file")
