@@ -204,6 +204,7 @@ ApplicationWindow {
                     }
 
                     NavigationRailTabArray {
+                        Layout.topMargin: 20
                         currentIndex: root.currentPage
                         expanded: navRail.expanded
                         Repeater {
